@@ -1,1 +1,1 @@
-# battary-info
+# battery-info
