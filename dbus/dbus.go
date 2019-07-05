@@ -5,7 +5,7 @@ import (
 	"github.com/godbus/dbus"
 )
 
-// DConnect connect to dbus
+// SystemBusConnect connect to dbus
 func SystemBusConnect() (conn *dbus.Conn, err error) {
 	conn, err = dbus.SystemBus()
 	return
@@ -24,7 +24,7 @@ func GetPercentage(conn *dbus.Conn) (p float64, err error) {
 	return
 }
 
-//BattNotification send notification
+// BattNotification send notification
 func BattNotification(conn *dbus.Conn, p int) (err error) {
 	sp := fmt.Sprintf("Battery percentage - %d", p)
 	obj := conn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
@@ -34,4 +34,12 @@ func BattNotification(conn *dbus.Conn, p int) (err error) {
 		return call.Err
 	}
 	return
+}
+
+// GetACStatus get online ac or offline
+func GetACStatus(conn *dbus.Conn) (ac bool, err error)  {
+	err = conn.Object("org.freedesktop.UPower", "/org/freedesktop/UPower/devices/line_power_AC").
+	Call("org.freedesktop.DBus.Properties.Get", 0, "org.freedesktop.UPower.Device", "Online").
+	Store(&ac)
+return
 }

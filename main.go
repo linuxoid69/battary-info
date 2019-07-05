@@ -40,7 +40,13 @@ func main() {
 			log.Println("Can't get percentage")
 		}
 
-		if p >= int(pp) {
+		ac, err := dbus.GetACStatus(sysdbus)
+
+		if err != nil {
+			log.Println("Can't get status AC")
+		}
+
+		if p >= int(pp) && ac == false {
 			err := dbus.BattNotification(sessiondbus, int(pp))
 			if err != nil {
 				log.Printf("Can't send notifycation: %s", err)
